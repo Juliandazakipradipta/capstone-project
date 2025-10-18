@@ -1,12 +1,10 @@
 import os
 from os.path import join, dirname
 from dotenv import load_dotenv
-import bcrypt
 from flask import Flask, render_template, request, redirect, url_for, jsonify, session
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from flask_bcrypt import Bcrypt
-from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from werkzeug.utils import secure_filename
 from datetime import datetime
@@ -461,7 +459,7 @@ def logout():
 @app.route('/create_first_admin', methods=['GET'])
 def create_first_admin():
     if not db.users.find_one({'role': 'admin'}):
-        hashed_password = bcrypt.generate_password_hash('admin_password').decode('utf-8')
+        hashed_password = bcrypt.generate_password_hash('admin123').decode('utf-8')
         db.users.insert_one({
             'name': 'Admin',
             'email': 'admin@admin.com',
@@ -470,6 +468,7 @@ def create_first_admin():
         })
         return "Admin pertama berhasil dibuat!"
     return "Admin sudah ada!"
+
 
 if __name__ == '__main__':
     app.run(debug=True)
